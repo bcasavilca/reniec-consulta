@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+jobs.db
+admin_token.txt
+.env
+.venv/

@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ActaSegura Perú — Verifica tu acta RENIEC sin DNI</title>
+<meta name="description" content="Verifica si tu acta de nacimiento, matrimonio o defunción está ubicada en RENIEC. Sin DNI para la búsqueda. Solo con el año o el mes.">
+<style>
+:root{
+  --rojo:#c8102e; --rojo-osc:#8f0b21; --dorado:#f2b705; --tinta:#1c1c22;
+  --gris:#f4f4f6; --verde:#0e7c3e; --guinda:#8f0b21; --blanco:#fff;
+  --radio:16px; --sombra:0 12px 32px rgba(0,0,0,.12);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;color:var(--tinta);background:var(--gris)}
+a{color:inherit}
+.top{background:var(--tinta);color:#fff;font-size:13px;text-align:center;padding:8px 12px}
+.top b{color:var(--dorado)}
+header{background:var(--blanco);position:sticky;top:0;z-index:10;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.nav{max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:12px 20px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px}
+.logo .sello{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--rojo),var(--rojo-osc));color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px}
+.logo small{display:block;font-weight:400;font-size:11px;color:#666}
+.nav a.btn{background:var(--rojo);color:#fff;text-decoration:none;padding:10px 18px;border-radius:999px;font-weight:700}
+.hero{background:radial-gradient(1000px 400px at 20% -10%,#e8384f 0%,transparent 60%),linear-gradient(120deg,#14141a,#3a0d16 60%,#6d1220);color:#fff}
+.hero-in{max-width:1080px;margin:0 auto;padding:56px 20px 40px;display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:center}
+.hero h1{margin:0 0 12px;font-size:clamp(28px,4.5vw,46px);line-height:1.05}
+.hero h1 span{color:var(--dorado)}
+.hero p.sub{font-size:17px;opacity:.92;max-width:520px}
+.badges{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
+.badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);padding:8px 12px;border-radius:999px;font-size:13px}
+.card{background:var(--blanco);border-radius:var(--radio);box-shadow:var(--sombra);padding:24px;color:var(--tinta)}
+.card h2{margin:0 0 4px;font-size:22px}
+.card p.hint{margin:0 0 14px;color:#555;font-size:14px}
+label{display:block;margin:12px 0 6px;font-weight:600;font-size:14px}
+input,select{width:100%;padding:12px;border:1.5px solid #ddd;border-radius:10px;font-size:16px;background:#fff}
+input:focus,select:focus{outline:none;border-color:var(--rojo);box-shadow:0 0 0 3px rgba(200,16,46,.12)}
+button.cta{width:100%;margin-top:16px;padding:14px;font-size:17px;font-weight:800;border:0;border-radius:12px;background:linear-gradient(135deg,var(--rojo),var(--rojo-osc));color:#fff;cursor:pointer}
+button.cta:disabled{opacity:.6;cursor:wait}
+.decl{display:flex;gap:8px;align-items:flex-start;margin-top:12px;font-size:13px;color:#444}
+.decl input{width:auto;margin-top:3px}
+#out{margin-top:14px;border-radius:12px;padding:14px;background:#fafafa;border:1px solid #e5e5e5;min-height:56px;font-size:15px}
+#out.ok{border-color:var(--verde);background:#eaf7ef;color:#0b5a2e}
+#out.no{border-color:var(--guinda);background:#fbecec;color:#7a0a1d}
+.bar{height:8px;background:#eee;border-radius:99px;margin-top:10px;overflow:hidden;display:none}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--dorado),var(--rojo));transition:width .4s}
+.lock{margin-top:12px;border:2px dashed var(--verde);border-radius:12px;padding:16px;background:#eaf7ef;text-align:center}
+.lock .fecha{font-size:22px;font-weight:800;user-select:text}
+.lock a.pagar{display:inline-block;margin-top:10px;background:#25d366;color:#fff;text-decoration:none;padding:12px 22px;border-radius:10px;font-weight:800}
+.lock a.copia{display:inline-block;margin-top:10px;margin-left:8px;background:#635bff;color:#fff;text-decoration:none;padding:12px 22px;border-radius:10px;font-weight:800}
+.lock button.revelar{margin-top:10px;margin-left:8px;padding:12px 18px;border-radius:10px;border:1.5px solid var(--tinta);background:#fff;font-weight:700;cursor:pointer}
+.seccion{max-width:1080px;margin:0 auto;padding:40px 20px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.paso{background:#fff;border-radius:var(--radio);padding:20px;box-shadow:var(--sombra)}
+.paso .n{width:34px;height:34px;border-radius:50%;background:var(--tinta);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;margin-bottom:10px}
+.precios{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.precio{background:#fff;border-radius:var(--radio);padding:24px;box-shadow:var(--sombra);border-top:6px solid var(--rojo)}
+.precio.dest{border-top-color:var(--dorado)}
+.precio .monto{font-size:34px;font-weight:800}
+.faq details{background:#fff;border-radius:12px;padding:14px 16px;margin:10px 0;box-shadow:0 4px 14px rgba(0,0,0,.05)}
+footer{background:var(--tinta);color:#ccc;text-align:center;padding:26px 16px;font-size:13px}
+footer b{color:#fff}
+@media(max-width:860px){.hero-in{grid-template-columns:1fr}.grid3,.precios{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="top">🇵🇪 Búsqueda <b>sin DNI</b> · Solo con el año o el mes · Resultado oficial <b>Acta ubicada / No se ubica</b></div>
+<header><div class="nav">
+  <div class="logo"><span class="sello">✔</span><span>ActaSegura Perú<small>Verificación de actas RENIEC</small></span></div>
+  <a class="btn" href="#verificar">Verificar ahora</a>
+</div></header>
+
+<section class="hero"><div class="hero-in">
+  <div>
+    <h1>¿Tu acta está en <span>RENIEC</span>? La encontramos y emitimos.</h1>
+    <p class="sub">Encontramos tu acta de <b>nacimiento, matrimonio o defunción</b>, sin DNI. ¿Solo tienes el <b>año</b>? Barremos los <b>365 días</b> por ti. ¿Tienes el <b>mes</b>? Son solo <b>~30 búsquedas</b>.</p>
+    <div class="badges">
+      <span class="badge">🔍 Sin DNI para buscar</span>
+      <span class="badge">📅 Basta el año: 1938</span>
+      <span class="badge">⏱️ ~30 días por minuto</span>
+      <span class="badge">🛡️ Ley N.º 29733</span>
+    </div>
+  </div>
+  <div class="card" id="verificar">
+    <h2>Encuentra tu acta</h2>
+    <p class="hint">Basta el año: <b>1938</b>. Con mes es más rápido: <b>1938-09</b>.</p>
+    <form id="f">
+      <label>Tipo de acta</label>
+      <select id="tipo">
+        <option value="01">01 · Nacimiento</option>
+        <option value="02">02 · Matrimonio</option>
+        <option value="03">03 · Defunción</option>
+      </select>
+      <label>Primer apellido</label><input id="pat" required placeholder="CASAVILCA" autocomplete="family-name">
+      <label>Segundo apellido</label><input id="mat" required placeholder="HILARIO">
+      <label>Nombres</label><input id="nom" required placeholder="SAMUEL">
+      <label>Fecha</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:8px">
+        <div><input id="dia" inputmode="numeric" maxlength="2" placeholder="Día"><small>Día</small></div>
+        <div><input id="mes" inputmode="numeric" maxlength="2" placeholder="Mes"><small>Mes</small></div>
+        <div><input id="ano" inputmode="numeric" maxlength="4" placeholder="Año *" required><small>Año *</small></div>
+      </div>
+      <label class="decl"><input type="checkbox" id="decl"><span>Soy familiar / es persona fallecida / uso genealógico. No busco personas vivas sin consentimiento (Ley N.º 29733).</span></label>
+      <button class="cta" id="btn">🔍 Verificar mi acta</button>
+    </form>
+    <div id="out">El resultado aparecerá aquí. Deja la página abierta durante la búsqueda.</div>
+    <div class="bar" id="bar"><i id="fill"></i></div>
+  </div>
+</div></section>
+
+<section class="seccion">
+  <h2>¿Cómo funciona?</h2>
+  <div class="grid3">
+    <div class="paso"><div class="n">1</div><b>Busca gratis</b><br>Busca en esta página: si ubicamos, te mostramos la <b>fecha exacta gratis</b>, sin pagar nada.</div>
+    <div class="paso"><div class="n">2</div><b>Fecha exacta gratis</b><br>Te mostramos el día/mes/año ubicado, <b>sin costo por ahora</b>.</div>
+    <div class="paso"><div class="n">3</div><b>Copia gratis por ahora</b><br>Te orientamos para emitir tu copia certificada, <b>todo gratis en esta fase</b>.</div>
+  </div>
+</section>
+
+<section class="seccion">
+  <h2>Planes simples</h2>
+  <div class="precios">
+    <div class="precio"><b>BÚSQUEDA / VERIFICACIÓN</b><div class="monto">Gratis</div>
+      <p>Descubre si el acta existe o no. Sin DNI. Barremos hasta 366 fechas por ti.</p></div>
+    <div class="precio dest"><b>FECHA EXACTA + COPIA (hacemos todo)</b><div class="monto" id="montoCopia">Gratis</div>
+      <p>Por ahora todo gratis: te mostramos la <b>fecha exacta ubicada</b> y te ayudamos con la <b>copia certificada por WhatsApp</b>.</p></div>
+  </div>
+  <p style="font-size:13px;color:#666">*Uso familiar/genealógico. Si el acta es de 1938 en Palca/Huando y no aparece en línea, puede existir solo en libro físico (municipalidad / archivo regional).</p>
+</section>
+
+<section class="seccion faq">
+  <h2>Preguntas frecuentes</h2>
+  <details><summary><b>¿Necesito DNI para buscar?</b></summary><p>No. La búsqueda es libre y gratuita.</p></details>
+  <details><summary><b>Solo tengo el año, ¿sirve?</b></summary><p>Sí. Escribe solo el año (<b>1938</b>) y barremos los 365 días (~15 min). Con el mes (<b>1938-09</b>) son ~30 búsquedas (~1 min).</p></details>
+  <details><summary><b>¿Cuánto cuesta?</b></summary><p>Nada por ahora. <b>Búsqueda, fecha exacta y ayuda con la copia: todo gratis</b> en esta fase.</p></details>
+  <details><summary><b>¿Qué significa “No se ubica”?</b></summary><p>Que con esos nombres y fecha no hay acta en línea. Revisa tildes (EXALTACIÓN→EXALTACION), el orden de los nombres y variantes (CASAVILLA, CAJAVILCA, QUIROS/QUIROZ). Si es muy antigua, puede existir solo en libro físico (municipalidad / archivo regional).</p></details>
+  <details><summary><b>¿Puedo pedir el acta de otra persona?</b></summary><p>Solo de familiares, personas fallecidas o para genealogía. Personas vivas, únicamente con su consentimiento (Ley N.º 29733).</p></details>
+</section>
+
+<footer><b>ActaSegura Perú</b> · Prototipo de verificación · Datos del servicio oficial RENIEC actas certificadas · Uso responsable Ley N.º 29733</footer>
+
+<script>
+// ===== FASE GRATIS - sin cobros por ahora =====
+// Búsqueda + fecha exacta + copia: todo gratis.
+const WHATSAPP = "393509100107"; // Business ActaSegura — sem + nem espaços
+function getPrecio(){ return "Gratis"; }
+// =====================================
+const f=document.getElementById('f'), out=document.getElementById('out'),
+  bar=document.getElementById('bar'), fill=document.getElementById('fill'), btn=document.getElementById('btn'),
+  tipo=document.getElementById('tipo'),
+  dia=document.getElementById('dia'), mes=document.getElementById('mes'), ano=document.getElementById('ano');
+tipo.onchange=()=>{ // día solo vale en nacimiento; mes no vale en defunción
+  dia.disabled=tipo.value!=="01"; mes.disabled=tipo.value==="03";
+  if(dia.disabled)dia.value=""; if(mes.disabled)mes.value="";
+};
+tipo.onchange();
+function armaFecha(){
+  const a=ano.value.trim(), m=mes.value.trim(), d=dia.value.trim();
+  if(!/^\d{4}$/.test(a))return{err:"Escribe el año (4 cifras, ej. 1938)."};
+  if(d && !m)return{err:"El día necesita el mes."};
+  if(m && !/^(0?[1-9]|1[0-2])$/.test(m))return{err:"Mes inválido (1-12)."};
+  if(d && !/^(0?[1-9]|[12][0-9]|3[01])$/.test(d))return{err:"Día inválido (1-31)."};
+  if(tipo.value==="01"){
+    if(d&&m)return{ok:d.padStart(2,"0")+"/"+m.padStart(2,"0")+"/"+a};
+    if(m)return{ok:a+"-"+m.padStart(2,"0")};
+    return{ok:a};
+  }
+  if(tipo.value==="02"){ // matrimonio: año-mes, sin día
+    if(m)return{ok:a+"-"+m.padStart(2,"0")};
+    return{ok:a};
+  }
+  return{ok:a}; // defunción: solo año
+}
+function pinta(txt){
+  out.className='';
+  if(/UBICADA|Acta ubicada/i.test(txt)) out.className='ok';
+  else if(/NO|No se ubica/i.test(txt)) out.className='no';
+}
+f.onsubmit=async e=>{
+  e.preventDefault();
+  if(!document.getElementById('decl').checked){out.textContent='Marca la casilla de declaración para continuar.';pinta('');return}
+  btn.disabled=true; out.textContent='En cola...'; pinta(''); bar.style.display='block'; fill.style.width='5%';
+  const ff=armaFecha();
+  if(ff.err){out.textContent='⚠️ '+ff.err;pinta('');btn.disabled=false;bar.style.display='none';return}
+  let r;
+  try{
+    r=await fetch('./jobs',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({tipo:tipo.value,paterno:pat.value,materno:mat.value,nombres:nom.value,fecha:ff.ok})});
+  }catch(err){out.textContent='Sin conexión con el servidor. Reintenta.';btn.disabled=false;return}
+  let j=await r.json();
+  if(j.error){out.textContent='⚠️ '+j.error;pinta('');btn.disabled=false;bar.style.display='none';return}
+  const total=j.total||1; let id=j.id, n=0;
+  out.textContent='Búsqueda '+id+' · '+total+' fecha(s). Puedes dejar la página abierta...';
+  let t=setInterval(async()=>{
+    n++;
+    try{
+      let s=await fetch('./jobs/'+id); let d=await s.json();
+      if(d.status==='done' && /UBICADA|Acta ubicada/i.test(d.result||'')){
+        clearInterval(t); fill.style.width='100%'; btn.disabled=false;
+        const real=d.result;
+        const pedido='Hola ActaSegura, encontré mi acta GRATIS. Búsqueda '+id+' · '+document.getElementById('tipo').selectedOptions[0].text+' · '+document.getElementById('pat').value.toUpperCase()+' / '+document.getElementById('mat').value.toUpperCase()+' / '+document.getElementById('nom').value.toUpperCase()+' · '+real;
+        const copiaBtn=/^\d{8,15}$/.test(WHATSAPP)
+          ? '<br><a class="pagar" target="_blank" rel="noopener" href="https://wa.me/'+WHATSAPP+'?text='+encodeURIComponent(pedido)+'">📲 Pedir copia gratis por WhatsApp</a>'
+          : '';
+        out.className='ok';
+        out.innerHTML='✅ <b>¡Acta ubicada en RENIEC!</b><br>Fecha exacta encontrada <b>gratis</b>, sin pagar nada.'
+          +'<div class="lock"><div class="fecha" id="fch">'+real.replace(/</g,'&lt;')+'</div><div style="margin-top:8px;font-size:14px">Búsqueda + fecha exacta + copia: <b>todo gratis por ahora</b>.</div>'+copiaBtn+'</div>';
+        pinta(real);
+        return;
+      }
+      out.textContent=(d.status==='done'?'✅ ':d.status==='working'?'🔎 ':'')+(d.result||d.status);
+      pinta(d.result||'');
+      let m=(d.result||'').match(/(\d+)\/(\d+)/);
+      fill.style.width=m?Math.min(99,Math.round(100*parseInt(m[1])/parseInt(m[2])))+'%':Math.min(95,5+n*3)+'%';
+      if(d.status==='done'||d.status==='error'){clearInterval(t);fill.style.width='100%';btn.disabled=false}
+    }catch(err){clearInterval(t);out.textContent='Se perdió la conexión. Recarga y reintenta.';btn.disabled=false}
+  },2000);
+};
+function paint(){
+  const p = "Gratis";
+  const m=document.getElementById('montoCopia');
+  if(m) m.textContent = p;
+  document.querySelectorAll('.js-precio').forEach(el=>el.textContent=p);
+}
+paint();
+</script>
+</body>
+</html>
